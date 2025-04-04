@@ -2,6 +2,7 @@ from PIL import Image, ImageDraw, ImageFont
 import qrcode
 import os
 from typing import Optional
+from pathlib import Path
 
 class ImageCompositeService:
     def __init__(self, storage_service):
@@ -17,8 +18,11 @@ class ImageCompositeService:
         :param output_path: 输出路径，如果为None则自动生成
         :return: 合成后的图片路径
         """
+        
+        file_path = Path(self.storage_service.base_path) / screenshot_path
+        
         # 打开原始截图
-        screenshot = Image.open(screenshot_path)
+        screenshot = Image.open(file_path)
         
         # 生成二维码
         qr = qrcode.QRCode(
@@ -61,16 +65,20 @@ class ImageCompositeService:
         text_position = ((new_width - text_width) // 2, new_height - watermark_height)
         draw.text(text_position, self.watermark_text, font=font, fill='gray')
         
+        
         # 保存合成后的图片
         if output_path is None:
-            output_path = self._generate_output_path(screenshot_path)
+            output_path = self._generate_output_path(file_path)
+        
+        directory = os.path.dirname(file_path)
+        
             
-        composite.save(output_path)
+        composite.save(os.path.join(directory, output_path))
+            
         return output_path
     
     def _generate_output_path(self, original_path: str) -> str:
         """生成输出路径"""
-        directory = os.path.dirname(original_path)
         filename = os.path.basename(original_path)
         name, ext = os.path.splitext(filename)
-        return os.path.join(directory, f"{name}_composite{ext}") 
+        return f"{name}_composite{ext}"

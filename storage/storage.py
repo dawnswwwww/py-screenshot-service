@@ -5,7 +5,7 @@ from typing import Protocol
 import os
 
 
-default_base_path = Path(__file__).parent.parent / "screenshots"
+default_base_path = "screenshots"
 storage_base_url = os.getenv("STORAGE_BASE_URL", default_base_path)
 
 class StorageService(Protocol):
@@ -22,4 +22,4 @@ class LocalStorageService:
         filename = f"{uuid.uuid4()}.{extension}"
         file_path = self.base_path / filename
         file_path.write_bytes(data)
-        return f"{storage_base_url}/{filename}" 
+        return filename 

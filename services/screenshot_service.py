@@ -30,14 +30,15 @@ class ScreenshotService:
             await browser.close()
             
             # 保存原始截图
-            original_path = self.storage_service.save(screenshot_bytes)
+            filename = self.storage_service.save(screenshot_bytes)
+            
             
             # 合成图片（添加二维码和水印）
-            composite_path = await self.image_composite_service.composite_image(original_path, url)
+            composite_filename = await self.image_composite_service.composite_image(filename, url)
             
             return {
-                "img_url": original_path,
-                "share_url": composite_path
+                "img_url": filename,
+                "share_url": composite_filename
             }
             
     async def take_screenshot(self, url: str, width: int = 1920, height: int = 1080) -> Dict[str, str]:
