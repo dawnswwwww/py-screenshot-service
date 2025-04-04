@@ -15,16 +15,16 @@ screenshot_service = ScreenshotService(storage_service)
 storage_base_url = os.getenv("STORAGE_BASE_URL")
 
 # 挂载静态文件目录
-app.mount("/static/screenshots", StaticFiles(directory=storage_base_url), name="screenshots")
+app.mount("/static", StaticFiles(directory=storage_base_url), name="screenshots")
 
 def get_image_url(request: Request, image_path: str) -> str:
     """获取完整的图片URL"""
     service_host = os.getenv("SERVICE_HOST")
     if service_host:
-        return f"{service_host}static/screenshots/{image_path}"
+        return f"{service_host}static/{image_path}"
     else:
         # 如果未配置 SERVICE_HOST，则使用请求的 host
-        return f"{request.base_url}static/screenshots/{image_path}"
+        return f"{request.base_url}static/{image_path}"
 
 class ScreenshotRequest(BaseModel):
     url: str

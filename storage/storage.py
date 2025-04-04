@@ -22,4 +22,4 @@ class LocalStorageService:
         filename = f"{uuid.uuid4()}.{extension}"
         file_path = self.base_path / filename
         file_path.write_bytes(data)
-        return filename 
+        return filename  # 只返回文件名，不包含目录 
