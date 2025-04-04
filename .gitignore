@@ -184,3 +184,5 @@ cython_debug/
 # Virtual environments
 .venv
 .env
+
+screenshots/
